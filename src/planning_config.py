@@ -11,9 +11,9 @@ PROJECT_DETAILS = {
         "Dart+ West": 314232,
         "Dart+ South West": 316119,
         "GMTT": 315087,
-        "DCLC": 310286,
+        "CDLC": 310286,
     },
-    "Bus": {
+    "Bus Connects": {
         "BCD 1": 313182,
         "BCD 2": 317121,
         "BCD 3/4": 314610,
@@ -31,8 +31,8 @@ PROJECT_DETAILS = {
 }
 
 PROJECT_ACRONYMS = {
-    "BCD": "Bus Connects Dublin Core Bus Corridor",
-    "BCG CCL": "Bus Connects Galway Cross-City Link",
+    "CDLC": "Cork Line Level Crossing Closures",
+    "BCD": "Dublin CBC",
+    "BCG CCL": "Galway Cross-City Link",
     "GMTT": "Glounthaune to Midleton Twin Tracking",
-    "DCLC": "Dublin-Cork Line Level Crossing Closures",
 }

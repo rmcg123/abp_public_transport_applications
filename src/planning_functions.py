@@ -1,5 +1,6 @@
 """Functions to facilitate the transport planning analysis."""
 import datetime as dt
+from textwrap import wrap
 
 import requests
 from bs4 import BeautifulSoup
@@ -115,6 +116,34 @@ def clean_planning_columns(planning_apps_df, acronym_replacements):
         planning_apps_df["project_name"] = planning_apps_df[
             "project_name"
         ].str.replace(acronym, replacement)
+
+    planning_apps_df["description"] = planning_apps_df[
+        "description"
+    ].str.lower()
+    planning_apps_df["project_name"] = np.where(
+        planning_apps_df["project_name"].str.startswith("Dublin CBC"),
+        planning_apps_df["project_name"]
+        + ": "
+        + (
+            planning_apps_df["description"]
+            .str.replace(" core", "")
+            .str.replace("bus", "")
+            .str.replace("connects ", "")
+            .str.replace("connect", "")
+            .str.replace("corridor", "")
+            .str.replace("scheme", "")
+            .str.replace(".", "")
+            .str.strip()
+        ).str.title(),
+        planning_apps_df["project_name"],
+    )
+    planning_apps_df["project_name"] = np.where(
+        planning_apps_df["project_name"].apply(lambda x: len(x)).gt(50),
+        planning_apps_df["project_name"].str.wrap(
+            width=50, break_long_words=False
+        ),
+        planning_apps_df["project_name"],
+    )
 
     # Sort from longest to shortest taken.
     planning_apps_df.sort_values(

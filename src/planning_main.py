@@ -14,7 +14,7 @@ rcParams["axes.titlesize"] = 24
 rcParams["axes.labelsize"] = 18
 rcParams["font.size"] = 16
 rcParams["xtick.labelsize"] = 16
-rcParams["ytick.labelsize"] = 16
+rcParams["ytick.labelsize"] = 14
 rcParams["legend.fontsize"] = 16
 rcParams["legend.title_fontsize"] = 18
 
