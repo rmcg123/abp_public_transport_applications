@@ -210,7 +210,7 @@ def plot_time_taken(planning_apps_df, save_dir, save_name):
 
     # Annotate to indicate when the plot was produced.
     ax.annotate(
-        f"Accurate as of {dt.datetime.today().date()}",
+        f"Accurate as of {dt.datetime.today()}",
         xy=(0.05, 0.01),
         xycoords="figure fraction",
         fontsize=14,
@@ -219,5 +219,6 @@ def plot_time_taken(planning_apps_df, save_dir, save_name):
     # Save plot.
     fig.tight_layout()
     fig.savefig(save_dir + save_name)
+    plt.close()
 
     return fig, ax

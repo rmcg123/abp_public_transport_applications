@@ -2,7 +2,9 @@
 import time
 
 import pandas as pd
+import matplotlib as mpl
 from matplotlib import rcParams
+from apscheduler.schedulers.background import BackgroundScheduler
 
 import planning_functions as pf
 import planning_config as cfg
@@ -18,8 +20,9 @@ rcParams["ytick.labelsize"] = 14
 rcParams["legend.fontsize"] = 16
 rcParams["legend.title_fontsize"] = 18
 
+mpl.use("agg")
 
-def main():
+def calculate_time_taken():
     # Loop through public transport projects retrieving planning application
     # information from ABP and add to an accruing DataFrame.
     planning_apps_df = pd.DataFrame()
@@ -54,6 +57,24 @@ def main():
         save_dir=cfg.OUTPUTS_FOLDER,
         save_name="time_taken.png",
     )
+
+
+def main():
+    """Run this once a day."""
+
+    schedule = BackgroundScheduler(
+        {
+            'apscheduler.timezone': 'UTC',
+        }
+    )
+
+    schedule.add_job(calculate_time_taken, "interval", days=1)
+    schedule.start()
+    try:
+        while True:
+            time.sleep(120)
+    except (KeyboardInterrupt, SystemExit):
+        schedule.shutdown()
 
 
 if __name__ == "__main__":
