@@ -222,3 +222,31 @@ def plot_time_taken(planning_apps_df, save_dir, save_name):
     plt.close()
 
     return fig, ax
+
+
+def make_page_html(planning_applications_df, file_path):
+
+    html_string_1 = """
+    {% extends "base.html" %}\n\n{% load static %}\n{% block page_content %}\n    <h1>\n        How Long is An Bord Pleanála Taking to Decide Public Transport Planning Applications?\n    </h1>\n\n    <p>\n        Over the coming years An Bord Pleanála (ABP) will have to process a large\n        volume of planning applications for housing as well as the energy,\n        transport and heating infrastructure necessary to facilitate Ireland\n        reaching its climate targets. Unfortunately, in recent years ABP has\n        been beset by problems raising questions as to whether it will be able\n        to handle this responsibility.\n    </p>\n\n    <p>\n        Here I want to examine how long it is taking to decide on public\n        transport infrastructure applications. To do this I looked up the\n        application codes for all of the major public transport projects which\n        have reached the ABP planning application stage. I then wrote some code\n        to retrieve the information for each of the planning application pages\n        from ABPs website for each relevant public transport project. The time\n        taken for planning application consideration to date is shown in the plot below.\n    </p>\n    <img src="{% static \'abp_pt_applications/time_taken.png\' %}" alt="Time taken by ABP per project" style="width:80%">\n\n    <p>\n        I\'ve written a script that should update this image daily so check back\n        to see how long these planning applications take. I will endeavour to add\n        new projects as they get submitted.\n    </p>
+    """
+
+    applications_descriptions = f"""
+    <p>
+    So far {planning_applications_df['date_signed'].notnull().sum()} of the public transport projects has had it's application decided on. The projects that have had their application decided are {", ".join(planning_applications_df.loc[planning_applications_df['date_signed'].notnull(), "project_name"].to_list())}. The decided applications have taken an average
+     of {int(planning_applications_df.loc[planning_applications_df['date_signed'].notnull(), "time_taken"].mean().round(0))} days.  
+    The planning application that has been in the system the longest without have a decision reached is the {planning_applications_df.loc[planning_applications_df['time_taken'].idxmax(), 'project_name']} which has taken {int(planning_applications_df["time_taken"].max())} days so far. </p>""".replace(
+        "\n", " ")
+
+
+    table = planning_applications_df[["project_name", "infrastructure_type", "lodged", "planning_id_code", "time_taken", "decision"]].to_html()
+    table_html = """A table of this data is presented below {}""".format(table)
+
+    html_string_2 = """
+    <p>\n        If you are interested in seeing how this was done the code for this\n        project is available on my GitHub\n            <a href="https://github.com/rmcg123/abp_public_transport_applications">here</a>\n    </p>\n{% endblock page_content %
+    """
+
+    page_html = html_string_1 + applications_descriptions + table_html + html_string_2
+
+    with open(file_path, "w") as f:
+        f.write(page_html)
+

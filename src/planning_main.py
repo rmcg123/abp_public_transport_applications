@@ -6,8 +6,8 @@ import matplotlib as mpl
 from matplotlib import rcParams
 from apscheduler.schedulers.background import BackgroundScheduler
 
-import planning_functions as pf
-import planning_config as cfg
+import src.planning_functions as pf
+import src.planning_config as cfg
 
 rcParams["font.family"] = "Arial"
 rcParams["figure.figsize"] = (16, 9)
@@ -21,6 +21,7 @@ rcParams["legend.fontsize"] = 16
 rcParams["legend.title_fontsize"] = 18
 
 mpl.use("agg")
+
 
 def calculate_time_taken():
     # Loop through public transport projects retrieving planning application
@@ -56,6 +57,9 @@ def calculate_time_taken():
         planning_apps_df,
         save_dir=cfg.OUTPUTS_FOLDER,
         save_name="time_taken.png",
+    )
+    pf.make_page_html(
+        planning_apps_df, file_path="../portfolio_website/pages/templates/pages/abp_pt_applications.html"
     )
 
 
